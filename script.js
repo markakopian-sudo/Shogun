@@ -1,11 +1,14 @@
 /* script.js */
-const audio = new Audio('assets/nights.mp3');
+// Using a direct link to the audio file so you don't have to upload it
+const audio = new Audio('https://files.catbox.moe/97p9v6.mp3'); 
 const playBtn = document.getElementById('playBtn');
 const timeDisplay = document.getElementById('time');
 
 function toggleMusic() {
     if (audio.paused) {
-        audio.play();
+        audio.play().catch(error => {
+            console.log("Playback failed. Click the button again.");
+        });
         playBtn.innerText = "PAUSE";
     } else {
         audio.pause();
@@ -13,14 +16,13 @@ function toggleMusic() {
     }
 }
 
-// Update time display every second
+// Update time display
 audio.addEventListener('timeupdate', () => {
     const mins = Math.floor(audio.currentTime / 60);
     const secs = Math.floor(audio.currentTime % 60);
     timeDisplay.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 });
 
-// Reset button when song ends
 audio.addEventListener('ended', () => {
     playBtn.innerText = "PLAY";
 });
