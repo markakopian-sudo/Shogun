@@ -1,13 +1,18 @@
-/* script.js */
-// Using a direct link to the audio file so you don't have to upload it
-const audio = new Audio('https://files.catbox.moe/97p9v6.mp3'); 
+// Direct link to the audio source
+const audioUrl = 'https://archive.org/download/frank-ocean-nights/Frank%20Ocean%20-%20Nights.mp3';
+const audio = new Audio(audioUrl);
 const playBtn = document.getElementById('playBtn');
 const timeDisplay = document.getElementById('time');
 
+// Set initial button text
+playBtn.innerText = "PLAY";
+
 function toggleMusic() {
     if (audio.paused) {
-        audio.play().catch(error => {
-            console.log("Playback failed. Click the button again.");
+        // Simple play command
+        audio.play().catch(e => {
+            console.error("Playback error:", e);
+            playBtn.innerText = "ERROR";
         });
         playBtn.innerText = "PAUSE";
     } else {
@@ -16,13 +21,14 @@ function toggleMusic() {
     }
 }
 
-// Update time display
+// Keep the time counter moving
 audio.addEventListener('timeupdate', () => {
     const mins = Math.floor(audio.currentTime / 60);
     const secs = Math.floor(audio.currentTime % 60);
     timeDisplay.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 });
 
+// Reset if the song finishes
 audio.addEventListener('ended', () => {
     playBtn.innerText = "PLAY";
 });
